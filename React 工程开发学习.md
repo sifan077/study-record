@@ -48,7 +48,7 @@ npm start
 
 2. 在src文件夹下创建名为App.js的文件，写入如下代码：
 
-```javascript
+```jsx
 import React, { Component } from 'react'
 
 export default class App extends Component {
@@ -64,7 +64,7 @@ export default class App extends Component {
 
 3. 在src文件夹下创建名为index.js的文件，写入如下代码：
 
-```javascript
+```jsx
 // 引入react核心库
 import React from "react";
 // 引入ReactDOM
@@ -116,7 +116,7 @@ export default class Hello extends Component{
 
 5. 更改App.js里的render如下，使其返回Hello组件
 
-```javascript
+```jsx
 import React, { Component } from 'react'
 
 import Hello from "./components/Hello/Hello";
@@ -140,7 +140,7 @@ export default class App extends Component {
 
 其引用大概如下代码所示：
 
-```javascript
+```jsx
 import React,{Component} from "react";
 
 // import './Hello.css'
@@ -158,5 +158,246 @@ export default class Hello extends Component{
         )
     }
 }
+```
+
+## 3.Axios使用
+
+### 3.1 Axios安装引入
+
+使用Axios需要先安装依赖，安装命令如下：
+
+```javascript
+npm install react-axios
+```
+
+安装完成后，可以在js文件开头使用如下语句导入:
+
+```javascript
+import axios from 'axios';
+```
+
+### 3.2 发送get请求
+
+发送get请求如下:
+
+```javascript
+axios.get(url)                   // url为发送请求至何处
+  .then(function (response) {
+    console.log(response.data); // 接收到服务器的回应后执行的操作
+  })
+  .catch(function (error) {
+    console.log(error);         // 发生错误后执行的操作
+  });
+
+
+```
+
+发送带参数的get请求:
+
+```javascript
+axios.get(url, { 
+  params: {   // params出填写需要发送的参数，为json写法
+    id: 1
+  }
+})
+  .then(function (response) {
+    console.log(response.data);
+  })
+  .catch(function (error) {
+    console.log(error);
+  });
+```
+
+### 3.3 发送post请求
+
+发送post请求如下:
+
+```javascript
+axios.post(url)
+  .then(function (response) {
+    console.log(response.data);
+  })
+  .catch(function (error) {
+    console.log(error);
+  });
+```
+
+发送带参数的post请求:
+
+```javascript
+axios.post(url,  //直接拼一个json发送
+  {
+    "aid": 2
+  }
+)
+  .then(function (response) {
+    console.log(response.data);
+  })
+  .catch(function (error) {
+    console.log(error);
+  });
+```
+
+## 4.路由的使用
+
+### 4.1 路由的基本使用
+
+使用路由需要引入 react-route-dom 依赖，引入方法如下，先使用包管理工具安装:
+
+```javascript
+npm install react-router-dom 
+```
+
+再在js开头导入即可使用，导入语句如下:
+
+```javascript
+import {
+	BrowserRouter,
+	Routes,
+	Route
+} from "react-router-dom";
+```
+
+基本的使用方式：
+
+```javascript
+<BrowserRouter>
+		<Routes>
+			<Route path="/" element={<组件 />} />
+			<Route path="expenses" element={<组件1 />} />
+			<Route path="invoices" element={<组件2 />} />
+		</Routes>
+	</BrowserRouter>
+```
+
+### 4.2 路由嵌套
+
+需要在父组件中添加一个  <Outlet/> 来作为渲染子组件的地方。
+
+```javascript
+<BrowserRouter>
+		<Routes>
+			<Route path="/" element={<App />}>      //子级路由写在父级路由标签中
+				<Route path="expenses" element={<组件1 />} />
+				<Route path="invoices" element={<组件2 />} />
+			</Route>
+		</Routes>
+	</BrowserRouter>
+```
+
+### 4.3 url传递参数
+
+```javascript
+<BrowserRouter>
+		<Routes>
+			<Route path="/" element={<App />}>
+				<Route path="invoices" element={<Invoices />} >
+					<Route path = ":invoiceId" element={<Invoice/>}/>     
+         //此处的路由实现url传递参数，别的组件实现根据参数进行不同的渲染
+				</Route>
+				<Route path="*" element={<main>This is nothing here</main>} />
+			</Route>
+		</Routes>
+	</BrowserRouter>
+```
+
+### 4.4 链接高亮
+
+实现链接高亮，需要把Link换为NavLink 并编写css，如下所示:
+
+```javascript
+ // normal string
+<NavLink className="red" />
+
+// function
+<NavLink className={({ isActive }) => isActive ? "red" : "blue"} />
+```
+
+### 4.5 url搜索参数
+
+搜索参数就类似于url参数，但是他们在url中所处的位置不同。
+
+不是由`/`分隔，他们出现在一个`?`之后，类似于这样的形式 "/login?success=1"`or`"/shoes?brand=nike&sort=asc&sortby=price
+
+需要导入 useSearchParams，react router 提供了 useSearchParams 用于读取和操作搜索参数。
+
+```javascript
+let invoices = getInvoices();
+let [searchParams, setSearchParams] = useSearchParams(); 
+
+
+
+<div style={{ display: "flex" }}>
+      <nav
+        style={{
+          borderRight: "solid 1px",
+          padding: "1rem"
+        }}
+      >
+        <label>根据姓名查找:</label>
+        <input
+          value={searchParams.get("filter") || ""}   // 输入内容
+          onChange={event => {                       //输入内容后
+            let filter = event.target.value;         //获取内容
+            if (filter) {                            //若存在则调用  setSearchParams 方法
+              setSearchParams({ filter });              
+            } else {
+              setSearchParams({});
+            }
+          }}
+        />
+        {invoices            
+          .filter(invoice => {                    //根据条件过滤集合
+            let filter = searchParams.get("filter");
+            if (!filter) return true;
+            let name = invoice.name.toLowerCase();
+            return name.startsWith(filter.toLowerCase());
+          }).map(invoice => (                    //遍历生成链接
+            <NavLink
+              style={({ isActive }) => ({
+                display: "block",
+                margin: "1rem 0",
+                color: isActive ? "red" : ""
+              })}
+              to={`/invoices/${invoice.number}`}
+              key={invoice.number}
+            >
+              {invoice.name}
+            </NavLink>
+          ))}
+```
+
+以上这种写法会导致点击链接后，过滤条件就会消失，所以改进一下,导入  useLocation ，类似于 `useSearchParams`, `useLocation` 也会返回一个location告诉我们一些信息。就类似于下面的格式
+
+```javascript
+function QueryNavLink({ to, ...props }) {
+  let location = useLocation();
+  return <NavLink to={to + location.search} {...props} />;
+} // 把上面代码的 Navlink组件全部换为 QueryNavLink 组件即可
+```
+
+### 4.6 编程式导航
+
+ 添加一个删除数据的方法：
+
+```javascript
+export function deleteInvoice(number) {
+  invoices = invoices.filter(
+    invoice => invoice.number !== number
+  );
+}
+```
+
+添加一个删除按钮：
+
+```javascript
+<button
+          onClick={() => {
+            deleteInvoice(invoice.number);
+            navigate("/invoices");
+          }}
+        >
+          Delete
+        </button>
 ```
 
