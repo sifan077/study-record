@@ -22,7 +22,7 @@ public class ServletDemo extends HttpServlet {
         PrintWriter out = response.getWriter();   //获取打印到网页的流
         out.println("<html><body>");              //打印到网页 
         out.println("<h1>" + "servletDemo" + "</h1>");
-        out.println("</bod  y></html>");
+        out.println("</body></html>");
         out.close();                              //关闭流
     }
 

@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div>
+<!--    form 表单默认提交为get   -->
+    <form action="MethodServlet">
+        用户名:<input type="text" name="username">
+        <input type="submit" value="GET提交">
+    </form>
+</div>
+
+<hr/>
+
+<div>
+    <!--    form 表单默认提交为get   -->
+    <form action="MethodServlet" method="POST">
+        用户名:<input type="text" name="username">
+        <input type="submit" value="POST提交">
+    </form>
+</div>
+
+<hr/>
+<div>
+    <!--    form 表单默认提交为get   -->
+    <form action="RedirectServlet">
+        <input type="submit" value="重定向">
+    </form>
+</div>
+</body>
+</html>
