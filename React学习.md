@@ -1082,7 +1082,7 @@ function NumberList(props) {
 
 如果我们想让前一个示例在提交时打印出名称，我们可以将表单写为受控组件：
 
-#### 9.2textarea 标签 
+#### 9.2 textarea 标签 
 
 在 HTML 中, `<textarea>` 元素通过其子元素定义其文本
 
@@ -1229,7 +1229,8 @@ class Reservation extends React.Component {
         <label>
           参与:
           <input
-            name="isGoing"            type="checkbox"
+            name="isGoing"
+            type="checkbox"
             checked={this.state.isGoing}
             onChange={this.handleInputChange} />
         </label>
