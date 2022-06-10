@@ -34,7 +34,7 @@ npm start
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>React</title>
 </head>
 
 <body>
@@ -167,6 +167,7 @@ export default class Hello extends Component{
 使用Axios需要先安装依赖，安装命令如下：
 
 ```javascript
+npm install axios
 npm install react-axios
 ```
 
@@ -293,7 +294,7 @@ import {
 			<Route path="/" element={<App />}>
 				<Route path="invoices" element={<Invoices />} >
 					<Route path = ":invoiceId" element={<Invoice/>}/>     
-         //此处的路由实现url传递参数，别的组件实现根据参数进行不同的渲染
+                    //此处的路由实现url传递参数，别的组件实现根据参数进行不同的渲染
 				</Route>
 				<Route path="*" element={<main>This is nothing here</main>} />
 			</Route>
