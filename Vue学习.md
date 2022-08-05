@@ -544,3 +544,59 @@ export default store;
 
    * 导入store变量，即可通过`store.state`来获取状态变量；
    * 使用`store.commit()`方法即可调用`mutations`中的方法改变状态变量；
+   
+   ### 6.2 getter使用
+   
+   getter通常是对state的状态变量进行一些处理后返回；
+   
+   1. 书写如下代码：
+   
+      ```javascript
+      import {createStore} from 'vuex'
+      
+      const store = createStore({
+          state() {
+              return {
+                  count: 0,
+                  flag: false,
+              }
+          },
+          getters: {
+              countAndFlag() {
+                  return {
+                      "count": store.state.count,
+                      "flag": store.state.flag
+                  }
+              }
+          },
+          mutations: {
+              increment(state) {
+                  state.count++;
+              },
+              change(state) {
+                  state.flag = !state.flag;
+              }
+          }
+      })
+      export default store;
+      ```
+   
+   2. 调用`getter`使用`store.getters.属性名`的方式调用；
+   
+      ```vue
+      <template>
+        <button @click="countAndFlag">getter</button>
+      </template>
+      
+      <script setup>
+      import store from '../store'
+      
+      const countAndFlag = () => {
+        console.log(store.getters.countAndFlag)
+      }
+      </script>
+      <style scoped>
+      </style>
+      ```
+   
+      
