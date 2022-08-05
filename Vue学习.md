@@ -483,5 +483,64 @@ const props = defineProps(['msg'])
 </style>
 ```
 
+## 6. Vuex的简单使用
 
+### 6.1 最简单的Vuex
 
+1. 在store文件夹下出出创建`index.js`文件如下：
+
+     ```javascript
+import {createStore} from 'vuex'
+
+const store = createStore({
+    state() {
+        return {
+            count: 0,
+            flag: false,
+        }
+    },
+    mutations: {
+        increment(state) {
+            state.count++;
+        },
+        change(state) {
+            state.flag = !state.flag;
+        }
+    }
+})
+export default store;
+     ```
+
+* 其中`state`中声明的为需要管理的状态变量；
+* `mutations`中是对状态做出一些更改的方法；
+
+2. 在`main.js`中引入`store`状态，并且使用`app.use(store)`使用状态；
+
+3. 在组件中使用状态和更改状态,代码如下:
+
+   ```vue
+   <template>
+     <button @click="add">{{ store.state.count }}</button>
+     <br>
+     <button @click="change">改变</button>
+     <h1 v-if="store.state.flag">Hello,Vuex</h1>
+   </template>
+   
+   <script setup>
+   import store from '../store'
+   
+   const change = () => {
+     store.commit('change');
+     console.log(store.state.flag);
+   }
+   const add = () => {
+     store.commit('increment');
+     console.log(store.state.count)
+   }
+   </script>
+   <style scoped>
+   </style>
+   ```
+
+   * 导入store变量，即可通过`store.state`来获取状态变量；
+   * 使用`store.commit()`方法即可调用`mutations`中的方法改变状态变量；
