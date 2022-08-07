@@ -1,5 +1,27 @@
 # Docker基本命令
 
+## Ubuntu开启docker服务
+
+### 1. 启动docker服务
+
+```bash
+sudo service docker start
+```
+
+### 2. 停止docker
+
+```bash
+sudo service docker stop
+```
+
+### 3. 重启docker
+
+```bash
+sudo service docker restart
+```
+
+
+
 ## 1.容器生命周期管理
 
 ### 1.1 run 命令
