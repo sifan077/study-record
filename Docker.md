@@ -170,6 +170,10 @@ docker exec -it mynginx /bin/sh /root/run.sh
 docker exec -i -t  mynginx /bin/bash
 
 //可以通过 docker ps -a 命令查看已经在运行的容器，然后使用容器 ID 进入容器。
+
+
+//一般进入docker容器
+docker exec 容器id  bash
 ```
 
 ## 2. 容器操作
