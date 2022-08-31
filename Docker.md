@@ -51,8 +51,8 @@ docker run --name mynginx -d nginx
 //使用镜像nginx以后台模式启动一个容器,并将容器的80端口映射到主机随机端口。
 docker run -P -d nginx
 
-//使用镜像 nginx:latest，以后台模式启动一个容器,将容器的 80 端口映射到主机的 80 端口,主机的目录 /data 映射到容器的 /data。
-docker run -p 80:80 -v /data:/data -d nginx
+//使用镜像 nginx:latest，以后台模式启动一个容器,将容器的 80 端口映射到主机的 800 端口,主机的目录 /data/test 映射到容器的 /data。
+docker run -p 800:80 -v /data/test:/data -d nginx
 
 //绑定容器的 8080 端口，并将其映射到本地主机 127.0.0.1 的 80 端口上。
 docker run -p 127.0.0.1:80:8080/tcp ubuntu bash

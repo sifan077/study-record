@@ -261,7 +261,7 @@ import {
 
 基本的使用方式：
 
-```javascript
+```jsx
 <BrowserRouter>
 		<Routes>
 			<Route path="/" element={<组件 />} />
@@ -275,7 +275,7 @@ import {
 
 需要在父组件中添加一个  <Outlet/> 来作为渲染子组件的地方。
 
-```javascript
+```jsx
 <BrowserRouter>
 		<Routes>
 			<Route path="/" element={<App />}>      //子级路由写在父级路由标签中
@@ -288,7 +288,7 @@ import {
 
 ### 4.3 url传递参数
 
-```javascript
+```jsx
 <BrowserRouter>
 		<Routes>
 			<Route path="/" element={<App />}>
@@ -306,7 +306,7 @@ import {
 
 实现链接高亮，需要把Link换为NavLink 并编写css，如下所示:
 
-```javascript
+```jsx
  // normal string
 <NavLink className="red" />
 
@@ -322,7 +322,7 @@ import {
 
 需要导入 useSearchParams，react router 提供了 useSearchParams 用于读取和操作搜索参数。
 
-```javascript
+```jsx
 let invoices = getInvoices();
 let [searchParams, setSearchParams] = useSearchParams(); 
 
@@ -370,7 +370,7 @@ let [searchParams, setSearchParams] = useSearchParams();
 
 以上这种写法会导致点击链接后，过滤条件就会消失，所以改进一下,导入  useLocation ，类似于 `useSearchParams`, `useLocation` 也会返回一个location告诉我们一些信息。就类似于下面的格式
 
-```javascript
+```jsx
 function QueryNavLink({ to, ...props }) {
   let location = useLocation();
   return <NavLink to={to + location.search} {...props} />;
@@ -381,7 +381,7 @@ function QueryNavLink({ to, ...props }) {
 
  添加一个删除数据的方法：
 
-```javascript
+```jsx
 export function deleteInvoice(number) {
   invoices = invoices.filter(
     invoice => invoice.number !== number
@@ -391,7 +391,7 @@ export function deleteInvoice(number) {
 
 添加一个删除按钮：
 
-```javascript
+```jsx
 <button
           onClick={() => {
             deleteInvoice(invoice.number);
@@ -400,5 +400,152 @@ export function deleteInvoice(number) {
         >
           Delete
         </button>
+```
+
+## 5. Redux使用
+
+redux对于javascript应用而言是一个可预测状态的容器，即它是一个数据流框架。
+
+先声明一个`state`状态：
+
+```js
+const stateData = {
+    count: 0
+};
+
+const stateData = {
+    flag: true
+};
+```
+
+声明`action`用来描述发生了什么：
+
+```js
+export const increaseAction = {
+    type: 'increase'
+}
+
+export const decreaseAction = {
+    type: 'decrease'
+}
+
+export const changeFlagAction = {
+    type: "change"
+}
+```
+
+分别使用不同的状态声明`reducer`:
+
+```js
+const stateData = {
+    count: 0
+};
+const countReducer = (state = stateData, action) => {
+    switch (action.type) {
+        case 'increase':
+            return {count: state.count + 1};
+        case 'decrease':
+            return {count: state.count - 1}
+        default:
+            return state;
+    }
+}
+
+export default countReducer;
+
+const stateData = {
+    flag: true
+};
+
+const setFlagReducer = (state = stateData, action) => {
+    switch (action.type) {
+        case "change":
+            return {flag: !state.flag};
+        default:
+            return state;
+    }
+}
+
+export default setFlagReducer;
+```
+
+使用`combineReducers`合并reducer，使用`createStore`创建`store`:
+
+```js
+const reducer = combineReducers({
+    countReducer: countReducer,
+    flagReducer: flagReducer
+});
+
+const store = createStore(reducer);
+
+
+export default store;
+```
+
+在`index.js`中引入`store`和`Provider`:
+
+```jsx
+const root = ReactDOM.createRoot(document.getElementById("root"));
+root.render(
+    <Provider store={store}>
+        <ConfigProvider locale={zhCN}>
+            <App/>
+        </ConfigProvider>
+    </Provider>
+);
+```
+
+声明一个组件渲染：
+
+```jsx
+import React from 'react';
+
+class Counter extends React.Component {
+    render() {
+        const {count, onIncreaseClick, onDecreaseClick, flag, onChangeFlagClick} = this.props;
+
+        return (
+            <div>
+                <span>{count}</span>
+                <br/>
+                <button type="button" onClick={onIncreaseClick}>Increase</button>
+                <br/>
+                <button type="button" onClick={onDecreaseClick}>Decrease</button>
+                <br/>
+                {
+                    flag ? <h1>True</h1> : <h1>False</h1>
+                }
+                <button type="button" onClick={onChangeFlagClick}>changeFlag</button>
+
+
+            </div>
+        )
+    }
+}
+
+export default Counter;
+```
+
+在`App.js`中把变量和`action`方法传入渲染组件：
+
+```jsx
+const mapStateToProps = (state) => ({
+    count: state.countReducer.count,
+    flag: state.flagReducer.flag
+})
+
+const mapDispatchToProps = (dispatch) => ({
+    onIncreaseClick: () => dispatch(increaseAction),
+    onDecreaseClick: () => dispatch(decreaseAction),
+    onChangeFlagClick: () => dispatch(changeFlagAction)
+})
+
+const App = connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(Counter)
+
+export default App;
 ```
 
