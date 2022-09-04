@@ -549,3 +549,87 @@ const App = connect(
 export default App;
 ```
 
+最简单的直接在组件中使用：
+
+```jsx
+import React from 'react';
+import {useSelector, useDispatch} from "react-redux";
+import {increaseAction, decreaseAction} from "./store/action";
+
+// redux简单使用
+
+function ReApp(props) {
+    const count = useSelector((state => state.countReducer.count));
+    const dispatch = useDispatch()
+    return (
+        <div>
+            <div>{count}</div>
+            <button onClick={() => {
+                dispatch(increaseAction);
+            }}>+
+            </button>
+            <button onClick={() => {
+                dispatch(decreaseAction);
+            }}>-
+            </button>
+        </div>
+    );
+}
+
+export default ReApp;
+```
+
+### 5.1 不同的组件中使用同一个`store`状态
+
+```jsx
+import React from 'react';
+import {useSelector, useDispatch} from "react-redux";
+import {increaseAction, decreaseAction} from "../store/action";
+import Split from "./Split";
+
+// redux简单使用
+
+function ReApp(props) {
+    const count = useSelector((state => state.countReducer.count));
+    const dispatch = useDispatch()
+    return (
+        <div>
+            <div>{count}</div>
+            <button onClick={() => {
+                dispatch(increaseAction);
+            }}>+
+            </button>
+            <button onClick={() => {
+                dispatch(decreaseAction);
+            }}>-
+            </button>
+            <hr/>
+            <Split/>
+        </div>
+    );
+}
+
+export default ReApp;
+```
+
+
+
+```jsx
+import React from 'react';
+import {useSelector} from "react-redux";
+
+const MyComponent = () => {
+    const count = useSelector((state => state.countReducer.count));
+    return (
+        <div>
+            <h1>另一个组件的count:{count}</h1>
+        </div>
+    );
+};
+
+export default MyComponent;
+
+```
+
+
+
