@@ -490,29 +490,27 @@ const props = defineProps(['msg'])
 1. 在store文件夹下出出创建`index.js`文件如下：
 
      ```javascript
-import {createStore} from 'vuex'
+     import {createStore} from 'vuex'
+     const store = createStore({
+         state() {
+             return {
+                 count: 0,
+                 flag: false,
+             }
+         },
+         mutations: {
+             increment(state) {
+                 state.count++;
+             },
+             change(state) {
+                 state.flag = !state.flag;
+             }
+         }
+     })
+     export default store;
 
-const store = createStore({
-    state() {
-        return {
-            count: 0,
-            flag: false,
-        }
-    },
-    mutations: {
-        increment(state) {
-            state.count++;
-        },
-        change(state) {
-            state.flag = !state.flag;
-        }
-    }
-})
-export default store;
-     ```
-
-* 其中`state`中声明的为需要管理的状态变量；
-* `mutations`中是对状态做出一些更改的方法；
+   +  其中`state`中声明的为需要管理的状态变量；
+   +  `mutations`中是对状态做出一些更改的方法；
 
 2. 在`main.js`中引入`store`状态，并且使用`app.use(store)`使用状态；
 
