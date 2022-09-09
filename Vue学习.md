@@ -543,10 +543,11 @@ const props = defineProps(['msg'])
    * 导入store变量，即可通过`store.state`来获取状态变量；
    * 使用`store.commit()`方法即可调用`mutations`中的方法改变状态变量；
    
-   ### 6.2 getter使用
-   
+
+ ### 6.2 getter使用
+
    getter通常是对state的状态变量进行一些处理后返回；
-   
+
    1. 书写如下代码：
    
       ```javascript
@@ -596,5 +597,35 @@ const props = defineProps(['msg'])
       <style scoped>
       </style>
       ```
-   
-      
+
+### 6.3 给状态赋自定义的值
+
+ 更改`store`的`mutations`,添加一个`assign`方法，传入两个参数，第一个`state`状态，第二个是要赋值的值`val`,如下:
+
+```js
+  mutations: {
+        assign(state,val){
+            state.count = val;
+        },
+    }
+```
+
+用一个组件来展示状态的变化，然后添加方法改变状态：
+
+```vue
+<template>
+    <button @click="assign">赋固定值为5</button>
+</template>
+
+<script setup>
+import store from '../store'
+    
+const assign= ()=>{
+  store.commit("assign",5);
+  console.log(store.state.count);
+}
+</script>
+<style scoped>
+</style>
+```
+

@@ -633,3 +633,71 @@ export default MyComponent;
 
 
 
+### 5.2 给状态赋给自己定义的值
+
+添加`action`:
+
+```js
+export const assignAction = {
+    type:"assign"
+}
+```
+
+修改`reducer`，给指定的`action`添加操作：
+
+```js
+const stateData = {
+    count: 0
+};
+const countReducer = (state = stateData, action) => {
+    switch (action.type) {
+            // 前两个都是对状态本身带的值进行操作。
+        case 'increase':
+            return { count: state.count + 1 };
+        case 'decrease':
+            return { count: state.count - 1 };
+            // 把action带的值赋给state,返回出去
+        case 'assign':
+            return { count: action.value }
+        default:
+            return state;
+    }
+}
+
+export default countReducer;
+```
+
+在页面展示效果:
+
+```jsx
+import React, { useState } from 'react';
+import { useSelector, useDispatch } from "react-redux";
+import {  assignAction } from "../store/action";
+
+// redux简单使用
+
+function ReApp(props) {
+    const count = useSelector((state => state.countReducer.count));
+    const dispatch = useDispatch();
+    const [inputVal, setInputVal] = useState(0);
+    return (
+        <div>
+            <div>{count}</div>
+            {/* 给state赋固定的值 */}
+            <form>
+                <input type="text" onChange={(event) => setInputVal(event.target.value)} />
+                <button type='submit' onClick={(event) => {
+                    event.preventDefault();
+                    let t = assignAction;
+                    t.value = inputVal;
+                   // console.log(t);
+                    dispatch(t);
+                }}>更改</button>
+            </form>
+        </div>
+    );
+}
+
+export default ReApp;
+```
+
