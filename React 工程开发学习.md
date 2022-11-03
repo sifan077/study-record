@@ -701,3 +701,36 @@ function ReApp(props) {
 export default ReApp;
 ```
 
+## 6. async await的简单使用
+
+react在页面加载前发送后端请求获取数据，然后通过数据渲染界面，使用async异步设置数据。
+
+```jsx
+import {useEffect, useState} from "react";
+import axios from "axios";
+
+function App() {
+
+    const [user, setUser] = useState({});
+    
+    useEffect(() => {
+        const fetchUser = async () => {
+            return await axios.get("/user");
+        }
+        fetchUser().then((res) => {
+            setUser(res.data);
+        });
+
+    }, [])
+
+
+    return (
+        <div>
+            <h1 className="float-right">HelloWorld,{user.name}!</h1>
+        </div>
+    )
+}
+
+export default App;
+```
+
