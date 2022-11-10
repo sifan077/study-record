@@ -715,12 +715,10 @@ function App() {
     
     useEffect(() => {
         const fetchUser = async () => {
-            return await axios.get("/user");
+            const res = await axios.get("/user");
+            setUser(res.data.data);
         }
-        fetchUser().then((res) => {
-            setUser(res.data);
-        });
-
+        fetchUser();
     }, [])
 
 
